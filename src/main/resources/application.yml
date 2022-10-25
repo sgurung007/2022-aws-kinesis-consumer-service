@@ -1,5 +1,5 @@
 server:
-  port: 9197
+  port: 9000
 spring:
   application:
     name: AWS-KINESIS-CONSUMER-SERVICE
@@ -7,13 +7,18 @@ spring:
     stream:
       bindings:
         processOrder-in-0:
-          destination: suraj-kinesis-1
+          destination: test_stream_100
           content-type: application/json
-        produceOrderSecond-out-0:
-          destination: suraj-kinesis-1
-          content-type: application/json
-          producer:
-            partitionKeyExpression: "1"
+          group: group100
       function:
-        definition: processOrder;produceOrderSecond
+        definition: processOrder
+      kinesis:
+        binder:
+          kpl-kcl-enabled: true
+
 originator: aws-consumer-service
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
